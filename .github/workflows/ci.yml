@@ -26,14 +26,12 @@ jobs:
       - run: scala-cli --server=false build.scala
       - name: Publish to Cloudflare Pages
         if: github.event_name == 'pull_request'
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: eb6a6bc2703dab72c6c99f9868808251
-          projectName: typelevel-website-test
-          directory: ./target
-          # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: pages deploy ./target --project-name=typelevel-website-test
       - if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
