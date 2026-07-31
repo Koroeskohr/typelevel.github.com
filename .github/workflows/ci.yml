@@ -35,7 +35,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy ./target --project-name=$CLOUDFLARE_PAGES_PROJECT_NAME
+          command: pages deploy ./target --project-name=${env.CLOUDFLARE_PAGES_PROJECT_NAME}
       - if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
