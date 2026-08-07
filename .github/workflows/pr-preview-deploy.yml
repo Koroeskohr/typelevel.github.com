@@ -8,6 +8,7 @@ on:
 permissions:
   actions: read
   contents: read
+  deployments: write
 
 env:
   CLOUDFLARE_PAGES_PROJECT_NAME: typelevel-website
@@ -38,6 +39,12 @@ jobs:
         id: pr
         run: echo "branch=pr-$(cat pr_number.txt)" >> "$GITHUB_OUTPUT"
       - name: Deploy
+        env:
+          # this action links the GitHub deployment to a PR using
+          # GITHUB_HEAD_REF, which isn't set on workflow_run events.
+          # We set it manually to the PR's head branch so the deployment
+          # shows up on the pull request.
+          GITHUB_HEAD_REF: ${{ github.event.workflow_run.head_branch }}
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
